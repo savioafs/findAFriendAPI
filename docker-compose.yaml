@@ -1,8 +1,8 @@
 version: "3.9"
 
 services:
-  go_db:
-    container_name: go_db
+  find_friend_db:
+    container_name: find_friend_db
     image: postgres:12
     environment:
       POSTGRES_PASSWORD: 1234
