@@ -13,5 +13,14 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  app:
+    build: .
+    environment:
+      DATABASE_URL: postgres://postgres:1234@find_friend_db:5432/postgres
+    depends_on:
+      - find_friend_db
+    ports:
+      - "8088:8088"
+
 volumes:
-  pgdata: {}
+  pgdata:

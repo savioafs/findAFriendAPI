@@ -1,15 +1,34 @@
 package useCase
 
-import "github.com/savioafs/findAFriendAPI/model"
+import (
+	"github.com/savioafs/findAFriendAPI/model"
+	"github.com/savioafs/findAFriendAPI/repository"
+)
 
 type PetUseCase struct {
-	// repository
+	petRepository *repository.PetRepository
 }
 
-func NewPetUseCase() PetUseCase {
-	return PetUseCase{}
+func NewPetUseCase(petRepository *repository.PetRepository) *PetUseCase {
+	return &PetUseCase{
+		petRepository: petRepository,
+	}
 }
 
-func (pu *PetUseCase) GetAllPets() ([]model.Pet, error) {
-	return []model.Pet{}, nil
+func (pu *PetUseCase) CreatePet(pet *model.Pet) error {
+	err := pu.petRepository.CreatePet(pet)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (pu *PetUseCase) FindByID(id string) (*model.Pet, error) {
+	pet, err := pu.petRepository.FindByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return pet, nil
 }
