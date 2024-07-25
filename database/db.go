@@ -16,7 +16,7 @@ func StartConnectionDB() *gorm.DB {
 		err        error
 	)
 
-	if os.Getenv("STAGE") == "localRun" {
+	if os.Getenv("STAGE") == "goDocker" {
 		databaseURL := os.Getenv("DATABASE_URL")
 		if databaseURL == "" {
 			log.Fatal("DATABASE_URL environment variable is not set")

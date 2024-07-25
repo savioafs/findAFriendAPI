@@ -9,6 +9,13 @@ type PetUseCase struct {
 	petInterface repository.PetStorer
 }
 
+type PetDTO struct {
+	ID    string `json:"id"`
+	Name  string `json:"name"`
+	About string `json:"about"`
+	Age   string `json:"age"`
+}
+
 func NewPetUseCase() *PetUseCase {
 	return &PetUseCase{
 		petInterface: repository.NewPetRepository(),
@@ -24,20 +31,39 @@ func (pu *PetUseCase) CreatePet(pet *model.Pet) error {
 	return nil
 }
 
-func (pu *PetUseCase) FindByID(id string) (*model.Pet, error) {
-	pet, err := pu.petInterface.FindByID(id)
+func (pu *PetUseCase) FindByID(id string) (PetDTO, error) {
+	petDB, err := pu.petInterface.FindByID(id)
 	if err != nil {
-		return nil, err
+		return PetDTO{}, err
+	}
+
+	pet := PetDTO{
+		Name:  petDB.Name,
+		About: petDB.About,
+		Age:   petDB.Age,
 	}
 
 	return pet, nil
 }
 
-func (pu *PetUseCase) FindAll(page, limit int, sort string) ([]model.Pet, error) {
+func (pu *PetUseCase) FindAll(page, limit int, sort string) ([]PetDTO, error) {
 
-	pets, err := pu.petInterface.FindAll(page, limit, sort)
+	petsDB, err := pu.petInterface.FindAll(page, limit, sort)
 	if err != nil {
 		return nil, err
+	}
+
+	var pets []PetDTO
+
+	for _, pet := range petsDB {
+		petOk := PetDTO{
+			ID:    pet.ID.String(),
+			Name:  pet.Name,
+			About: pet.About,
+			Age:   pet.Age,
+		}
+
+		pets = append(pets, petOk)
 	}
 
 	return pets, nil

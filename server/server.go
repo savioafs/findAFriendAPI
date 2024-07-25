@@ -5,11 +5,19 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"github.com/savioafs/findAFriendAPI/server/routes"
 )
 
+func init() {
+	if err := godotenv.Load(); err != nil {
+		log.Fatal("Error loading .env file")
+	}
+}
+
 func getStage() string {
-	if os.Getenv("STAGE") == "localRun" {
+	stage := os.Getenv("STAGE")
+	if stage == "goDocker" {
 		return ":8088"
 	}
 
