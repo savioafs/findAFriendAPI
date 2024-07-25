@@ -9,6 +9,12 @@ import (
 	"github.com/savioafs/findAFriendAPI/useCase"
 )
 
+const (
+	InvalidOrEmptyIDMsg     = "invalid or empty id"
+	PetRegisteredSuccessMsg = "Pet registered with success"
+	DeletedWithSuccessMsg   = "deleted with success"
+)
+
 type PetController struct {
 	petUseCase *useCase.PetUseCase
 }
@@ -34,7 +40,7 @@ func (pc *PetController) CreatePet(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusAccepted, gin.H{
-		"Message: ": "Pet registred with succeess",
+		"Message": PetRegisteredSuccessMsg,
 	})
 }
 
@@ -43,7 +49,7 @@ func (pc *PetController) FindByID(c *gin.Context) {
 
 	if id == "" {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"Message: ": "invalid or empty id",
+			"Message": InvalidOrEmptyIDMsg,
 		})
 		return
 	}
@@ -86,7 +92,7 @@ func (pc *PetController) Delete(c *gin.Context) {
 
 	if id == "" {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"Message: ": "invalid or empty id",
+			"Message": InvalidOrEmptyIDMsg,
 		})
 		return
 	}
@@ -98,6 +104,6 @@ func (pc *PetController) Delete(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"message": "deleted with success",
+		"Message": DeletedWithSuccessMsg,
 	})
 }
