@@ -6,17 +6,17 @@ import (
 )
 
 type PetUseCase struct {
-	petRepository *repository.PetRepository
+	petInterface repository.PetInterface
 }
 
-func NewPetUseCase(petRepository *repository.PetRepository) *PetUseCase {
+func NewPetUseCase(petInterface repository.PetInterface) *PetUseCase {
 	return &PetUseCase{
-		petRepository: petRepository,
+		petInterface: petInterface,
 	}
 }
 
 func (pu *PetUseCase) CreatePet(pet *model.Pet) error {
-	err := pu.petRepository.CreatePet(pet)
+	err := pu.petInterface.CreatePet(pet)
 	if err != nil {
 		return err
 	}
@@ -25,7 +25,7 @@ func (pu *PetUseCase) CreatePet(pet *model.Pet) error {
 }
 
 func (pu *PetUseCase) FindByID(id string) (*model.Pet, error) {
-	pet, err := pu.petRepository.FindByID(id)
+	pet, err := pu.petInterface.FindByID(id)
 	if err != nil {
 		return nil, err
 	}
@@ -35,7 +35,7 @@ func (pu *PetUseCase) FindByID(id string) (*model.Pet, error) {
 
 func (pu *PetUseCase) FindAll(page, limit int, sort string) ([]model.Pet, error) {
 
-	pets, err := pu.petRepository.FindAll(page, limit, sort)
+	pets, err := pu.petInterface.FindAll(page, limit, sort)
 	if err != nil {
 		return nil, err
 	}
