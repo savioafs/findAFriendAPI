@@ -2,6 +2,7 @@ package repository
 
 import (
 	"github.com/google/uuid"
+	"github.com/savioafs/findAFriendAPI/database"
 	"github.com/savioafs/findAFriendAPI/model"
 	"gorm.io/gorm"
 )
@@ -10,9 +11,9 @@ type PetRepository struct {
 	connection *gorm.DB
 }
 
-func NewPetRepository(connection *gorm.DB) *PetRepository {
+func NewPetRepository() *PetRepository {
 	return &PetRepository{
-		connection: connection,
+		connection: database.StartConnectionDB(),
 	}
 }
 

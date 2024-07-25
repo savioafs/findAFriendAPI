@@ -13,9 +13,9 @@ type PetController struct {
 	petUseCase *useCase.PetUseCase
 }
 
-func NewPetController(petUseCase *useCase.PetUseCase) *PetController {
+func NewPetController() *PetController {
 	return &PetController{
-		petUseCase: petUseCase,
+		petUseCase: useCase.NewPetUseCase(),
 	}
 }
 

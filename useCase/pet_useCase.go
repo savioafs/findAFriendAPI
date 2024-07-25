@@ -9,9 +9,9 @@ type PetUseCase struct {
 	petInterface repository.PetStorer
 }
 
-func NewPetUseCase(petInterface repository.PetStorer) *PetUseCase {
+func NewPetUseCase() *PetUseCase {
 	return &PetUseCase{
-		petInterface: petInterface,
+		petInterface: repository.NewPetRepository(),
 	}
 }
 
