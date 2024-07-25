@@ -39,10 +39,12 @@ func (pc *PetController) CreatePet(c *gin.Context) {
 
 func (pc *PetController) FindByID(c *gin.Context) {
 	id := c.Param("id")
+
 	if id == "" {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"Message: ": "invalid or empty id",
 		})
+		return
 	}
 
 	petOk, err := pc.petUseCase.FindByID(id)
