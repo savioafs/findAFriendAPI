@@ -11,8 +11,6 @@ COPY go.mod go.sum ./
 # Download Go modules dependencies
 RUN go mod download
 
-# Copy the source code
-COPY . .
 
 # Expose the port
 EXPOSE 8088
