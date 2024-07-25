@@ -1,6 +1,8 @@
 package model
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 )
 
@@ -15,4 +17,5 @@ type Pet struct {
 	Ambience       string    `json:"ambience"`
 	Photos         []string  `json:"photos" gorm:"type:text[]"`
 	Requirements   string    `json:"requirements"`
+	CreatedAt      time.Time `json:"created_at"`
 }

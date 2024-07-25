@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/savioafs/findAFriendAPI/model"
@@ -54,4 +55,28 @@ func (pc *PetController) FindByID(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, petOk)
+}
+
+func (pc *PetController) FindAll(c *gin.Context) {
+	pageStr := c.DefaultQuery("page", "1")
+	limitStr := c.DefaultQuery("limit", "10")
+	sort := c.DefaultQuery("sort", "asc")
+
+	page, err := strconv.Atoi(pageStr)
+	if err != nil || page < 1 {
+		page = 1
+	}
+
+	limit, err := strconv.Atoi(limitStr)
+	if err != nil || limit < 1 {
+		limit = 10
+	}
+
+	pets, err := pc.petUseCase.FindAll(page, limit, sort)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, pets)
 }

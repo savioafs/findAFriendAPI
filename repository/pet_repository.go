@@ -29,3 +29,11 @@ func (pr *PetRepository) FindByID(id string) (*model.Pet, error) {
 	err := pr.connection.First(&pet, "id = ?", id).Error
 	return &pet, err
 }
+
+func (pu *PetRepository) FindAll(page, limit int, sort string) ([]model.Pet, error) {
+	var pets []model.Pet
+
+	err := pu.connection.Limit(limit).Offset((page - 1) * limit).Order("created_at " + sort).Find(&pets).Error
+
+	return pets, err
+}

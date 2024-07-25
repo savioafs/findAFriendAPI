@@ -51,6 +51,7 @@ func main() {
 		{
 			pets.POST("", petController.CreatePet)
 			pets.GET("/:id", petController.FindByID)
+			pets.GET("/", petController.FindAll)
 		}
 	}
 

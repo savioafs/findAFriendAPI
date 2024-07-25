@@ -32,3 +32,13 @@ func (pu *PetUseCase) FindByID(id string) (*model.Pet, error) {
 
 	return pet, nil
 }
+
+func (pu *PetUseCase) FindAll(page, limit int, sort string) ([]model.Pet, error) {
+
+	pets, err := pu.petRepository.FindAll(page, limit, sort)
+	if err != nil {
+		return nil, err
+	}
+
+	return pets, nil
+}
