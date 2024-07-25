@@ -80,3 +80,24 @@ func (pc *PetController) FindAll(c *gin.Context) {
 
 	c.JSON(http.StatusOK, pets)
 }
+
+func (pc *PetController) Delete(c *gin.Context) {
+	id := c.Param("id")
+
+	if id == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"Message: ": "invalid or empty id",
+		})
+		return
+	}
+
+	err := pc.petUseCase.Delete(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "deleted with success",
+	})
+}

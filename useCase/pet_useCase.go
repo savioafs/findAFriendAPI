@@ -6,10 +6,10 @@ import (
 )
 
 type PetUseCase struct {
-	petInterface repository.PetInterface
+	petInterface repository.PetStorer
 }
 
-func NewPetUseCase(petInterface repository.PetInterface) *PetUseCase {
+func NewPetUseCase(petInterface repository.PetStorer) *PetUseCase {
 	return &PetUseCase{
 		petInterface: petInterface,
 	}
@@ -41,4 +41,15 @@ func (pu *PetUseCase) FindAll(page, limit int, sort string) ([]model.Pet, error)
 	}
 
 	return pets, nil
+}
+
+func (pu *PetUseCase) Delete(id string) error {
+	pet, err := pu.petInterface.FindByID(id)
+	if err != nil {
+		return err
+	}
+
+	err = pu.petInterface.Delete(pet)
+
+	return err
 }
