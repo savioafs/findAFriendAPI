@@ -7,15 +7,15 @@ import (
 )
 
 type Pet struct {
-	ID             uuid.UUID `json:"id" gorm:"type:TEXT;primary_key"`
-	Name           string    `json:"name"`
-	About          string    `json:"about"`
-	Age            string    `json:"age"`
-	Size           string    `json:"size"`
-	EnergyLevel    string    `json:"energy_level"`
-	DependeceLevel string    `json:"dependece_level"`
-	Ambience       string    `json:"ambience"`
-	Photos         []string  `json:"photos" gorm:"type:text[]"`
-	Requirements   string    `json:"requirements"`
-	CreatedAt      time.Time `json:"created_at"`
+	ID             uuid.UUID `gorm:"type:VARCHAR(36);primary_key"`
+	Name           string    `gorm:"type:VARCHAR(100)"`
+	About          string    `gorm:"type:TEXT"`
+	Age            string    `gorm:"type:VARCHAR(10)"`
+	Size           string    `gorm:"type:VARCHAR(20)"`
+	EnergyLevel    string    `gorm:"type:VARCHAR(20)"`
+	DependeceLevel string    `gorm:"type:VARCHAR(20)"`
+	Ambience       string    `gorm:"type:VARCHAR(50)"`
+	Photos         []string  `gorm:"type:TEXT[]"`
+	Requirements   string    `gorm:"type:TEXT"`
+	CreatedAt      time.Time `gorm:"type:TIMESTAMP"`
 }

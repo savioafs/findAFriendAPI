@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/savioafs/findAFriendAPI/model"
+	"github.com/savioafs/findAFriendAPI/dto"
 	"github.com/savioafs/findAFriendAPI/useCase"
 )
 
@@ -20,14 +20,14 @@ func NewPetController() *PetController {
 }
 
 func (pc *PetController) CreatePet(c *gin.Context) {
-	var pet model.Pet
+	var pet dto.PetDTO
 	err := c.BindJSON(&pet)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err)
 		return
 	}
 
-	err = pc.petUseCase.CreatePet(&pet)
+	err = pc.petUseCase.CreatePet(pet)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return

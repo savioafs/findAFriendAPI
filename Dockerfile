@@ -3,10 +3,22 @@ FROM golang:1.21
 # set working directory
 WORKDIR /go/src/app
 
-# Copy the source code
-COPY . . 
+# Create a non-root user and switch to it
+RUN useradd -m myuser
+USER myuser
 
-#EXPOSE the port
+# Copy only the Go modules and dependencies files
+COPY go.mod go.sum ./
+
+# Download Go modules dependencies
+RUN go mod download
+
+# Copy the source code
+COPY ./cmd ./cmd
+COPY ./pkg ./pkg
+COPY ./internal ./internal
+
+# EXPOSE the port
 EXPOSE 8088
 
 # Build the Go app

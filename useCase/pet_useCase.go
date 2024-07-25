@@ -1,6 +1,9 @@
 package useCase
 
 import (
+	"errors"
+
+	"github.com/savioafs/findAFriendAPI/dto"
 	"github.com/savioafs/findAFriendAPI/model"
 	"github.com/savioafs/findAFriendAPI/repository"
 )
@@ -9,21 +12,33 @@ type PetUseCase struct {
 	petInterface repository.PetStorer
 }
 
-type PetDTO struct {
-	ID    string `json:"id"`
-	Name  string `json:"name"`
-	About string `json:"about"`
-	Age   string `json:"age"`
-}
-
 func NewPetUseCase() *PetUseCase {
 	return &PetUseCase{
 		petInterface: repository.NewPetRepository(),
 	}
 }
 
-func (pu *PetUseCase) CreatePet(pet *model.Pet) error {
-	err := pu.petInterface.CreatePet(pet)
+func (pu *PetUseCase) CreatePet(petRequest dto.PetDTO) error {
+
+	if petRequest.Name == "" {
+		return errors.New("pet name is required")
+	}
+
+	if len(petRequest.Name) > 100 {
+		return errors.New("pet name must be less than 100 characteres")
+	}
+
+	petExists := true
+
+	if petExists {
+		return errors.New("pet with this name already exists")
+	}
+
+	pet := model.Pet{
+		Name: petRequest.Name,
+	}
+
+	err := pu.petInterface.CreatePet(&pet)
 	if err != nil {
 		return err
 	}
@@ -31,13 +46,13 @@ func (pu *PetUseCase) CreatePet(pet *model.Pet) error {
 	return nil
 }
 
-func (pu *PetUseCase) FindByID(id string) (PetDTO, error) {
+func (pu *PetUseCase) FindByID(id string) (dto.PetDTO, error) {
 	petDB, err := pu.petInterface.FindByID(id)
 	if err != nil {
-		return PetDTO{}, err
+		return dto.PetDTO{}, err
 	}
 
-	pet := PetDTO{
+	pet := dto.PetDTO{
 		Name:  petDB.Name,
 		About: petDB.About,
 		Age:   petDB.Age,
@@ -46,17 +61,17 @@ func (pu *PetUseCase) FindByID(id string) (PetDTO, error) {
 	return pet, nil
 }
 
-func (pu *PetUseCase) FindAll(page, limit int, sort string) ([]PetDTO, error) {
+func (pu *PetUseCase) FindAll(page, limit int, sort string) ([]dto.PetDTO, error) {
 
 	petsDB, err := pu.petInterface.FindAll(page, limit, sort)
 	if err != nil {
 		return nil, err
 	}
 
-	var pets []PetDTO
+	var pets []dto.PetDTO
 
 	for _, pet := range petsDB {
-		petOk := PetDTO{
+		petOk := dto.PetDTO{
 			ID:    pet.ID.String(),
 			Name:  pet.Name,
 			About: pet.About,
