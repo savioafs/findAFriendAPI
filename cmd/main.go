@@ -17,12 +17,13 @@ import (
 func main() {
 	server := gin.Default()
 
-	isDockerRun := false
-	var connection *gorm.DB
-	var err error
+	var (
+		port       string
+		connection *gorm.DB
+		err        error
+	)
 
-	if isDockerRun {
-
+	if os.Getenv("STAGE") == "localRun" {
 		databaseURL := os.Getenv("DATABASE_URL")
 		if databaseURL == "" {
 			log.Fatal("DATABASE_URL environment variable is not set")
@@ -32,11 +33,15 @@ func main() {
 		if err != nil {
 			log.Fatalf("failed to open db: %v", err)
 		}
+
+		port = ":8088"
 	} else {
 		connection, err = gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
 		if err != nil {
 			log.Fatalf("failed to open db: %v", err)
 		}
+
+		port = ":8000"
 	}
 
 	connection.AutoMigrate(&model.Pet{})
@@ -56,10 +61,5 @@ func main() {
 		}
 	}
 
-	// ---------------------------
-	if isDockerRun {
-		server.Run(":8088")
-	}
-
-	server.Run(":8000")
+	server.Run(port)
 }
