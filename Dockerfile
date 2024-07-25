@@ -3,8 +3,6 @@ FROM golang:1.21
 # Set working directory
 WORKDIR /go/src/app
 
-
-
 # Copy only the Go modules and dependencies files
 COPY go.mod go.sum ./
 
