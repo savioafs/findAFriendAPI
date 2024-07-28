@@ -20,7 +20,21 @@ func NewPetUseCase() *PetUseCase {
 }
 
 func (pu *PetUseCase) CreatePet(petRequest dto.PetDTO) error {
-	// validar se o pet ja existe
+	petFind, err := pu.petStorer.FindByName(petRequest.Name)
+	if err != nil {
+		return err
+	}
+
+	if petFind != nil {
+		return fmt.Errorf("pet already registred: %v", err)
+	}
+
+	orgRepository := repository.NewOrganizationRepository()
+
+	_, err = orgRepository.FindByID(petRequest.OrganizationID)
+	if err != nil {
+		return fmt.Errorf("organization does not exists: %v", err)
+	}
 
 	organizationID, err := uuid.Parse(petRequest.OrganizationID)
 	if err != nil {

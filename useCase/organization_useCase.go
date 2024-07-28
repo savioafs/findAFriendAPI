@@ -38,3 +38,20 @@ func (ou *OrganizationUseCase) CreateOrganization(orgRequest dto.OrganizationDTO
 
 	return nil
 }
+
+func (ou *OrganizationUseCase) FindByID(id string) (dto.OrganizationDTO, error) {
+	org, err := ou.organizationStorer.FindByID(id)
+	if err != nil {
+		return dto.OrganizationDTO{}, nil
+	}
+
+	var pets []dto.PetDTO
+
+	for _, pet := range org.Pets {
+		pets = append(pets, dto.NewPetDTO(pet))
+	}
+
+	orgDTO := dto.NewOrganizationDTO(*org, pets)
+
+	return orgDTO, nil
+}

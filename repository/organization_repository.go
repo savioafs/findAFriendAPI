@@ -21,3 +21,25 @@ func (or *OrganizationRepository) CreateOrganization(organization *model.Organiz
 	organization.ID = uuid.New()
 	return or.connection.Create(organization).Error
 }
+
+func (pr *OrganizationRepository) FindByName(name string) (*model.Organization, error) {
+	var org model.Organization
+
+	err := pr.connection.Preload("Pets").First(&org, "name = ?", name).Error
+	return &org, err
+}
+
+func (pr *OrganizationRepository) FindByID(id string) (*model.Organization, error) {
+	var org model.Organization
+
+	err := pr.connection.Preload("Pets").First(&org, "id = ?", id).Error
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, nil
+		}
+
+		return nil, err
+	}
+
+	return &org, err
+}

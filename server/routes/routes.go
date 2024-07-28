@@ -24,6 +24,7 @@ func ConfigRoutes(router *gin.Engine) *gin.Engine {
 		organizations := main.Group("organizations")
 		{
 			organizations.POST("/", organizationController.CreateOrganization)
+			organizations.GET("/:id", organizationController.FindByID)
 		}
 	}
 

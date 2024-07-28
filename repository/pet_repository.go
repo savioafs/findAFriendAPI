@@ -29,6 +29,21 @@ func (pr *PetRepository) FindByID(id string) (*model.Pet, error) {
 	return &pet, err
 }
 
+func (pr *PetRepository) FindByName(name string) (*model.Pet, error) {
+	var pet model.Pet
+
+	err := pr.connection.Where("name = ?", name).First(&pet).Error
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, nil
+		}
+
+		return nil, err
+	}
+
+	return &pet, err
+}
+
 func (pr *PetRepository) FindAll(page, limit int, sort string) ([]model.Pet, error) {
 	var pets []model.Pet
 
