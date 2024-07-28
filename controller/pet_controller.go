@@ -13,6 +13,7 @@ const (
 	InvalidOrEmptyIDMsg     = "invalid or empty id"
 	PetRegisteredSuccessMsg = "Pet registered with success"
 	DeletedWithSuccessMsg   = "deleted with success"
+	InvalidData             = "Does not possible create pet with data"
 )
 
 type PetController struct {
@@ -29,7 +30,9 @@ func (pc *PetController) CreatePet(c *gin.Context) {
 	var pet dto.PetDTO
 	err := c.BindJSON(&pet)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"Message": InvalidData,
+		})
 		return
 	}
 

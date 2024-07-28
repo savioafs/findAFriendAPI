@@ -8,3 +8,7 @@ type PetStorer interface {
 	FindAll(page, limit int, sort string) ([]model.Pet, error)
 	Delete(pet *model.Pet) error
 }
+
+type OrganiztionStorer interface {
+	CreateOrganization(organization *model.Organization) error
+}

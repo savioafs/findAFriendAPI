@@ -8,6 +8,7 @@ import (
 func ConfigRoutes(router *gin.Engine) *gin.Engine {
 
 	petController := controller.NewPetController()
+	organizationController := controller.NewOrganizationController()
 
 	main := router.Group("/api/v1")
 	{
@@ -18,6 +19,11 @@ func ConfigRoutes(router *gin.Engine) *gin.Engine {
 			pets.GET("/", petController.FindAll)
 			pets.DELETE("/:id", petController.Delete)
 			// add pets put
+		}
+
+		organizations := main.Group("organizations")
+		{
+			organizations.POST("/", organizationController.CreateOrganization)
 		}
 	}
 
