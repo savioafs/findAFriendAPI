@@ -17,7 +17,7 @@ func NewOrganizationRepository() *OrganizationRepository {
 	}
 }
 
-func (or *OrganizationRepository) CreateOrganization(organization *model.Organization) error {
+func (or *OrganizationRepository) Create(organization *model.Organization) error {
 	organization.ID = uuid.New()
 	return or.connection.Create(organization).Error
 }
@@ -33,13 +33,6 @@ func (pr *OrganizationRepository) FindByID(id string) (*model.Organization, erro
 	var org model.Organization
 
 	err := pr.connection.Preload("Pets").First(&org, "id = ?", id).Error
-	if err != nil {
-		if err == gorm.ErrRecordNotFound {
-			return nil, nil
-		}
-
-		return nil, err
-	}
 
 	return &org, err
 }

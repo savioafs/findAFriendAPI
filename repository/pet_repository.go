@@ -17,7 +17,7 @@ func NewPetRepository() *PetRepository {
 	}
 }
 
-func (pr *PetRepository) CreatePet(pet *model.Pet) error {
+func (pr *PetRepository) Create(pet *model.Pet) error {
 	pet.ID = uuid.New()
 
 	return pr.connection.Create(pet).Error

@@ -53,7 +53,7 @@ func (pu *PetUseCase) CreatePet(petRequest dto.PetDTO) error {
 		OrganizationID: organizationID,
 	}
 
-	err = pu.petStorer.CreatePet(&pet)
+	err = pu.petStorer.Create(&pet)
 	if err != nil {
 		return err
 	}

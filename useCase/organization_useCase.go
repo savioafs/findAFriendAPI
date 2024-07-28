@@ -4,24 +4,32 @@ import (
 	"github.com/savioafs/findAFriendAPI/dto"
 	"github.com/savioafs/findAFriendAPI/model"
 	"github.com/savioafs/findAFriendAPI/repository"
+	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm/logger"
 )
 
 type OrganizationUseCase struct {
-	organizationStorer repository.OrganizationRepository
+	organizationStorer repository.OrganiztionStorer
 }
 
 func NewOrganizationUseCase() *OrganizationUseCase {
 	return &OrganizationUseCase{
-		organizationStorer: *repository.NewOrganizationRepository(),
+		organizationStorer: repository.NewOrganizationRepository(),
 	}
 }
 
 func (ou *OrganizationUseCase) CreateOrganization(orgRequest dto.OrganizationDTO) error {
+
+	hash, err := bcrypt.GenerateFromPassword([]byte(orgRequest.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+
 	organization := model.Organization{
 		Name:     orgRequest.Name,
 		Manager:  orgRequest.Manager,
 		Email:    orgRequest.Email,
-		Password: orgRequest.Password,
+		Password: string(hash),
 		Cep:      orgRequest.Cep,
 		Address: model.Address{
 			Street:   orgRequest.Street,
@@ -31,7 +39,7 @@ func (ou *OrganizationUseCase) CreateOrganization(orgRequest dto.OrganizationDTO
 		},
 	}
 
-	err := ou.organizationStorer.CreateOrganization(&organization)
+	err = ou.organizationStorer.Create(&organization)
 	if err != nil {
 		return err
 	}
@@ -41,7 +49,7 @@ func (ou *OrganizationUseCase) CreateOrganization(orgRequest dto.OrganizationDTO
 
 func (ou *OrganizationUseCase) FindByID(id string) (dto.OrganizationDTO, error) {
 	org, err := ou.organizationStorer.FindByID(id)
-	if err != nil {
+	if err != nil && err != logger.ErrRecordNotFound {
 		return dto.OrganizationDTO{}, nil
 	}
 
