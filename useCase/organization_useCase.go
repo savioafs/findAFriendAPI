@@ -39,7 +39,7 @@ func (ou *OrganizationUseCase) CreateOrganization(orgRequest dto.OrganizationDTO
 		},
 	}
 
-	err = ou.organizationStorer.Create(&organization)
+	err = ou.organizationStorer.CreateOrganization(&organization)
 	if err != nil {
 		return err
 	}
@@ -47,8 +47,8 @@ func (ou *OrganizationUseCase) CreateOrganization(orgRequest dto.OrganizationDTO
 	return nil
 }
 
-func (ou *OrganizationUseCase) FindByID(id string) (dto.OrganizationDTO, error) {
-	org, err := ou.organizationStorer.FindByID(id)
+func (ou *OrganizationUseCase) FindOrganizationByID(id string) (dto.OrganizationDTO, error) {
+	org, err := ou.organizationStorer.FindOrganizationByID(id)
 	if err != nil && err != logger.ErrRecordNotFound {
 		return dto.OrganizationDTO{}, nil
 	}

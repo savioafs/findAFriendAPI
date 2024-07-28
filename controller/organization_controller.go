@@ -49,7 +49,7 @@ func (oc *OrganizationController) FindByID(c *gin.Context) {
 		return
 	}
 
-	org, err := oc.organizationUseCase.FindByID(id)
+	org, err := oc.organizationUseCase.FindOrganizationByID(id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return

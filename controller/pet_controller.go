@@ -57,7 +57,7 @@ func (pc *PetController) FindByID(c *gin.Context) {
 		return
 	}
 
-	petOk, err := pc.petUseCase.FindByID(id)
+	petOk, err := pc.petUseCase.FindPetByID(id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return
@@ -81,7 +81,7 @@ func (pc *PetController) FindAll(c *gin.Context) {
 		limit = 10
 	}
 
-	pets, err := pc.petUseCase.FindAll(page, limit, sort)
+	pets, err := pc.petUseCase.FindAllPets(page, limit, sort)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return
@@ -100,7 +100,7 @@ func (pc *PetController) Delete(c *gin.Context) {
 		return
 	}
 
-	err := pc.petUseCase.Delete(id)
+	err := pc.petUseCase.DeletePetByID(id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return

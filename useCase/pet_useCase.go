@@ -10,17 +10,19 @@ import (
 )
 
 type PetUseCase struct {
-	petStorer repository.PetStorer
+	petStorer          repository.PetStorer
+	organizationStorer repository.OrganiztionStorer
 }
 
 func NewPetUseCase() *PetUseCase {
 	return &PetUseCase{
-		petStorer: repository.NewPetRepository(),
+		petStorer:          repository.NewPetRepository(),
+		organizationStorer: repository.NewOrganizationRepository(),
 	}
 }
 
 func (pu *PetUseCase) CreatePet(petRequest dto.PetDTO) error {
-	petFind, err := pu.petStorer.FindByName(petRequest.Name)
+	petFind, err := pu.petStorer.FindPetByName(petRequest.Name)
 	if err != nil {
 		return err
 	}
@@ -29,9 +31,7 @@ func (pu *PetUseCase) CreatePet(petRequest dto.PetDTO) error {
 		return fmt.Errorf("pet already registred: %v", err)
 	}
 
-	orgRepository := repository.NewOrganizationRepository()
-
-	_, err = orgRepository.FindByID(petRequest.OrganizationID)
+	_, err = pu.organizationStorer.FindOrganizationByID(petRequest.OrganizationID)
 	if err != nil {
 		return fmt.Errorf("organization does not exists: %v", err)
 	}
@@ -53,7 +53,7 @@ func (pu *PetUseCase) CreatePet(petRequest dto.PetDTO) error {
 		OrganizationID: organizationID,
 	}
 
-	err = pu.petStorer.Create(&pet)
+	err = pu.petStorer.CreatePet(&pet)
 	if err != nil {
 		return err
 	}
@@ -61,8 +61,8 @@ func (pu *PetUseCase) CreatePet(petRequest dto.PetDTO) error {
 	return nil
 }
 
-func (pu *PetUseCase) FindByID(id string) (dto.PetDTO, error) {
-	petDB, err := pu.petStorer.FindByID(id)
+func (pu *PetUseCase) FindPetByID(id string) (dto.PetDTO, error) {
+	petDB, err := pu.petStorer.FindPetByID(id)
 	if err != nil {
 		return dto.PetDTO{}, err
 	}
@@ -76,9 +76,9 @@ func (pu *PetUseCase) FindByID(id string) (dto.PetDTO, error) {
 	return pet, nil
 }
 
-func (pu *PetUseCase) FindAll(page, limit int, sort string) ([]dto.PetDTO, error) {
+func (pu *PetUseCase) FindAllPets(page, limit int, sort string) ([]dto.PetDTO, error) {
 
-	petsDB, err := pu.petStorer.FindAll(page, limit, sort)
+	petsDB, err := pu.petStorer.FindAllPets(page, limit, sort)
 	if err != nil {
 		return nil, err
 	}
@@ -99,13 +99,13 @@ func (pu *PetUseCase) FindAll(page, limit int, sort string) ([]dto.PetDTO, error
 	return pets, nil
 }
 
-func (pu *PetUseCase) Delete(id string) error {
-	pet, err := pu.petStorer.FindByID(id)
+func (pu *PetUseCase) DeletePetByID(id string) error {
+	pet, err := pu.petStorer.FindPetByID(id)
 	if err != nil {
 		return err
 	}
 
-	err = pu.petStorer.Delete(pet)
+	err = pu.petStorer.DeletePet(pet)
 
 	return err
 }

@@ -17,22 +17,22 @@ func NewOrganizationRepository() *OrganizationRepository {
 	}
 }
 
-func (or *OrganizationRepository) Create(organization *model.Organization) error {
+func (or *OrganizationRepository) CreateOrganization(organization *model.Organization) error {
 	organization.ID = uuid.New()
 	return or.connection.Create(organization).Error
 }
 
-func (pr *OrganizationRepository) FindByName(name string) (*model.Organization, error) {
-	var org model.Organization
-
-	err := pr.connection.Preload("Pets").First(&org, "name = ?", name).Error
-	return &org, err
-}
-
-func (pr *OrganizationRepository) FindByID(id string) (*model.Organization, error) {
+func (pr *OrganizationRepository) FindOrganizationByID(id string) (*model.Organization, error) {
 	var org model.Organization
 
 	err := pr.connection.Preload("Pets").First(&org, "id = ?", id).Error
 
+	return &org, err
+}
+
+func (pr *OrganizationRepository) FindOrganizationByName(name string) (*model.Organization, error) {
+	var org model.Organization
+
+	err := pr.connection.Preload("Pets").First(&org, "name = ?", name).Error
 	return &org, err
 }

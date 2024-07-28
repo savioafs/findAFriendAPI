@@ -17,19 +17,19 @@ func NewPetRepository() *PetRepository {
 	}
 }
 
-func (pr *PetRepository) Create(pet *model.Pet) error {
+func (pr *PetRepository) CreatePet(pet *model.Pet) error {
 	pet.ID = uuid.New()
 
 	return pr.connection.Create(pet).Error
 }
 
-func (pr *PetRepository) FindByID(id string) (*model.Pet, error) {
+func (pr *PetRepository) FindPetByID(id string) (*model.Pet, error) {
 	var pet model.Pet
 	err := pr.connection.First(&pet, "id = ?", id).Error
 	return &pet, err
 }
 
-func (pr *PetRepository) FindByName(name string) (*model.Pet, error) {
+func (pr *PetRepository) FindPetByName(name string) (*model.Pet, error) {
 	var pet model.Pet
 
 	err := pr.connection.Where("name = ?", name).First(&pet).Error
@@ -44,7 +44,7 @@ func (pr *PetRepository) FindByName(name string) (*model.Pet, error) {
 	return &pet, err
 }
 
-func (pr *PetRepository) FindAll(page, limit int, sort string) ([]model.Pet, error) {
+func (pr *PetRepository) FindAllPets(page, limit int, sort string) ([]model.Pet, error) {
 	var pets []model.Pet
 
 	err := pr.connection.Limit(limit).Offset((page - 1) * limit).Order("created_at " + sort).Find(&pets).Error
@@ -52,7 +52,7 @@ func (pr *PetRepository) FindAll(page, limit int, sort string) ([]model.Pet, err
 	return pets, err
 }
 
-func (pr *PetRepository) Delete(pet *model.Pet) error {
+func (pr *PetRepository) DeletePet(pet *model.Pet) error {
 	err := pr.connection.Delete(pet).Error
 	return err
 }
